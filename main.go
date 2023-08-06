@@ -70,7 +70,7 @@ func GetNewPrUrl(repository string, branch string) string {
 func GetPrUrl(repository string, branch string) string {
 	branchOrNumber := ""
 
-	if isNumber(branch) {
+	if IsNumberString(branch) {
 		repo := strings.Replace(repository, "https://github.com/", "", 1)
 		repoQuery := fmt.Sprintf("--repo=%s", repo)
 		headQuery := fmt.Sprintf("--head=%s", branch)
@@ -97,7 +97,7 @@ func GetPrUrl(repository string, branch string) string {
 	return prUrl
 }
 
-func isNumber(value string) bool {
+func IsNumberString(value string) bool {
 	if _, err := strconv.Atoi(value); err == nil {
 		return true
 	}

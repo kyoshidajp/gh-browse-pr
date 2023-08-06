@@ -1,6 +1,6 @@
 # gh-browse-pr
 
-`gh-browse-pr` is a GitHub CLI extention to open pull request page in your current directory.
+`gh-browse-pr` is a GitHub CLI extention to open pull request in your current branch of the directory.
 
 If a pull request already exists, it opens that page; otherwise, it opens the page where the pull request was created.
 

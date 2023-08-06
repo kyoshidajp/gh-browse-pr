@@ -22,6 +22,11 @@ func Execute() {
 	repositoryURL := getRepositoryURL()
 	prURL := GetPrURL(repositoryURL, currentBranch)
 
+	if !strings.HasPrefix(prURL, GitHubURL) {
+		message := fmt.Sprintf("Can't open URL: %s", prURL)
+		log.Fatal(message)
+	}
+
 	browser.OpenURL(prURL)
 }
 

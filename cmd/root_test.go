@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"testing"
@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPrUrl(t *testing.T) {
+func TestGetPrURL(t *testing.T) {
 	expected := "https://github.com/kyoshidajp/gh-browse-pr/pull/main"
-	actual := GetPrUrl(
+	actual := GetPrURL(
 		"https://github.com/kyoshidajp/gh-browse-pr",
 		"main",
 	)
@@ -16,10 +16,10 @@ func TestGetPrUrl(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestGetNewPrUrl(t *testing.T) {
+func TestGetNewPrURL(t *testing.T) {
 	assert.Equal(t,
 		"https://github.com/kyoshidajp/gh-browse-pr/compare/test?expand=1",
-		GetNewPrUrl("https://github.com/kyoshidajp/gh-browse-pr", "test"),
+		GetNewPrURL("https://github.com/kyoshidajp/gh-browse-pr", "test"),
 	)
 }
 

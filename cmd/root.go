@@ -19,10 +19,10 @@ const (
 
 func Execute() {
 	currentBranch := getCurrentBranch()
-	repositoryUrl := getRepositoryUrl()
-	prUrl := GetPrUrl(repositoryUrl, currentBranch)
+	repositoryURL := getRepositoryURL()
+	prURL := GetPrURL(repositoryURL, currentBranch)
 
-	browser.OpenURL(prUrl)
+	browser.OpenURL(prURL)
 }
 
 func getCurrentBranch() string {
@@ -45,7 +45,7 @@ func getCurrentBranch() string {
 	return strings.Replace(ref, "refs/heads/", "", 1)
 }
 
-func getRepositoryUrl() string {
+func getRepositoryURL() string {
 	stdOut, _, err := gh.Exec("browse", "-n")
 	if err != nil {
 		log.Fatal(err)
@@ -54,24 +54,24 @@ func getRepositoryUrl() string {
 	return strings.TrimSuffix(stdOut.String(), "\n")
 }
 
-func GetNewPrUrl(repository string, branch string) string {
-	prUrl, err := url.JoinPath(repository, "compare", branch)
+func GetNewPrURL(repository string, branch string) string {
+	prURL, err := url.JoinPath(repository, "compare", branch)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	parsedUrl, err := url.Parse(prUrl)
+	parsedURL, err := url.Parse(prURL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	queries := parsedUrl.Query()
+	queries := parsedURL.Query()
 	queries.Add("expand", "1")
-	parsedUrl.RawQuery = queries.Encode()
-	return parsedUrl.String()
+	parsedURL.RawQuery = queries.Encode()
+	return parsedURL.String()
 }
 
-func GetPrUrl(repository string, branch string) string {
+func GetPrURL(repository string, branch string) string {
 	branchOrNumber := ""
 
 	if IsNumberString(branch) {
@@ -80,12 +80,12 @@ func GetPrUrl(repository string, branch string) string {
 		headQuery := fmt.Sprintf("--head=%s", branch)
 		searchedPrNumber, _, err := gh.Exec("search", "prs", repoQuery, headQuery, "--json=number", "-q=.[].number")
 		if err != nil {
-			return GetNewPrUrl(repository, branch)
+			return GetNewPrURL(repository, branch)
 		}
 
 		prNumber := strings.TrimSuffix(searchedPrNumber.String(), "\n")
 		if prNumber == "" {
-			return GetNewPrUrl(repository, branch)
+			return GetNewPrURL(repository, branch)
 		} else {
 			branchOrNumber = prNumber
 		}
@@ -93,12 +93,12 @@ func GetPrUrl(repository string, branch string) string {
 		branchOrNumber = branch
 	}
 
-	prUrl, err := url.JoinPath(repository, "pull", branchOrNumber)
+	prURL, err := url.JoinPath(repository, "pull", branchOrNumber)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return prUrl
+	return prURL
 }
 
 func IsNumberString(value string) bool {

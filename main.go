@@ -14,7 +14,7 @@ import (
 func main() {
 	currentBranch := getCurrentBranch()
 	repositoryUrl := getRepositoryUrl()
-	prUrl := getPrUrl(repositoryUrl, currentBranch)
+	prUrl := GetPrUrl(repositoryUrl, currentBranch)
 
 	browser.OpenURL(prUrl)
 }
@@ -48,7 +48,7 @@ func getRepositoryUrl() string {
 	return strings.TrimSuffix(stdOut.String(), "\n")
 }
 
-func getPrUrl(repository string, branch string) string {
+func GetPrUrl(repository string, branch string) string {
 	prUrl, err := url.JoinPath(repository, "pull", branch)
 	if err != nil {
 		log.Fatal(err)

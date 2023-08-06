@@ -13,6 +13,10 @@ import (
 	"github.com/pkg/browser"
 )
 
+const (
+	GitHubURL = "https://github.com"
+)
+
 func Execute() {
 	currentBranch := getCurrentBranch()
 	repositoryUrl := getRepositoryUrl()
@@ -71,7 +75,7 @@ func GetPrUrl(repository string, branch string) string {
 	branchOrNumber := ""
 
 	if IsNumberString(branch) {
-		repo := strings.Replace(repository, "https://github.com/", "", 1)
+		repo := strings.Replace(repository, GitHubURL+"/", "", 1)
 		repoQuery := fmt.Sprintf("--repo=%s", repo)
 		headQuery := fmt.Sprintf("--head=%s", branch)
 		searchedPrNumber, _, err := gh.Exec("search", "prs", repoQuery, headQuery, "--json=number", "-q=.[].number")

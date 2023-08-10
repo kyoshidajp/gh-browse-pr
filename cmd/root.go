@@ -18,9 +18,9 @@ const (
 )
 
 func Execute() {
-	currentBranch := getCurrentBranch()
-	repositoryURL := getRepositoryURL()
-	prURL := GetPrURL(repositoryURL, currentBranch)
+	branch := currentBranch()
+	repositoryURL := repositoryURL()
+	prURL := PrURL(repositoryURL, branch)
 
 	if !strings.HasPrefix(prURL, GitHubURL) {
 		message := fmt.Sprintf("Can't open URL: %s", prURL)
@@ -30,7 +30,7 @@ func Execute() {
 	browser.OpenURL(prURL)
 }
 
-func getCurrentBranch() string {
+func currentBranch() string {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func getCurrentBranch() string {
 	return strings.Replace(ref, "refs/heads/", "", 1)
 }
 
-func getRepositoryURL() string {
+func repositoryURL() string {
 	stdOut, _, err := gh.Exec("browse", "-n")
 	if err != nil {
 		log.Fatal(err)
@@ -59,7 +59,7 @@ func getRepositoryURL() string {
 	return strings.TrimSuffix(stdOut.String(), "\n")
 }
 
-func GetNewPrURL(repository string, branch string) string {
+func NewPrURL(repository string, branch string) string {
 	prURL, err := url.JoinPath(repository, "compare", branch)
 	if err != nil {
 		log.Fatal(err)
@@ -76,7 +76,7 @@ func GetNewPrURL(repository string, branch string) string {
 	return parsedURL.String()
 }
 
-func GetPrURL(repository string, branch string) string {
+func PrURL(repository string, branch string) string {
 	branchOrNumber := ""
 
 	if IsNumberString(branch) {
@@ -85,12 +85,12 @@ func GetPrURL(repository string, branch string) string {
 		headQuery := fmt.Sprintf("--head=%s", branch)
 		searchedPrNumber, _, err := gh.Exec("search", "prs", repoQuery, headQuery, "--json=number", "-q=.[].number")
 		if err != nil {
-			return GetNewPrURL(repository, branch)
+			return NewPrURL(repository, branch)
 		}
 
 		prNumber := strings.TrimSuffix(searchedPrNumber.String(), "\n")
 		if prNumber == "" {
-			return GetNewPrURL(repository, branch)
+			return NewPrURL(repository, branch)
 		} else {
 			branchOrNumber = prNumber
 		}

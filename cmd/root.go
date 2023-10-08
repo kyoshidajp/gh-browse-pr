@@ -36,7 +36,7 @@ func currentBranch() string {
 		log.Fatal(err)
 	}
 
-	repo, err := git.PlainOpen(dir)
+	repo, err := git.PlainOpenWithOptions(dir, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		log.Fatal(err)
 	}
